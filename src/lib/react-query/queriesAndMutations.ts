@@ -1,11 +1,12 @@
-import { INewPost, INewUser, IUpdatePost } from '@/types'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { INewPost, INewUser, IUpdatePost, IUpdateUser } from '@/types'
 import {
   useQuery,
   useMutation,
   useQueryClient,
   useInfiniteQuery
 } from '@tanstack/react-query'
-import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getPostById, getRecentPosts, likePost, savePost, searchPosts, signInAccount, signOutAccount, updatePost } from '../appwrite/api'
+import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteUsers, getPostById, getRecentPosts, getUserById, getUsers, likePost, savePost, searchPosts, signInAccount, signOutAccount, updatePost, updateUser } from '../appwrite/api'
 import { QUERY_KEYS } from './queryKeys'
 
 export const useCreateUserAccount = () => {
@@ -153,10 +154,11 @@ export const useGetPosts = () => {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
     queryFn: getInfinitePosts,
+    //@ts-expect-error Overload issue
     getNextPageParam: (lastPage) => {
-      if(lastPage && lastPage.documents.length === 0) return null
+      if(lastPage && lastPage.documents.length === 0) return null;
 
-      const lastId = lastPage.documents[lastPage?.documents.length - 1].$id;
+      const lastId = lastPage?.documents[lastPage?.documents?.length - 1].$id;
       return lastId
     }
   })
@@ -169,3 +171,53 @@ export const useSearchPosts = (searchTerm: string) => {
     enabled: !!searchTerm
   })
 }
+
+export const useGetUsers = (limit?: number) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USERS],
+    queryFn: () => getUsers(limit),
+  });
+};
+
+export const useGetInfiniteUsers = () => {
+  return useInfiniteQuery({
+    queryKey: [QUERY_KEYS.GET_INFINITE_USERS],
+    queryFn: getInfiniteUsers,
+    //@ts-expect-error Overload issue
+    getNextPageParam: (lastPage) => {
+			if(lastPage && lastPage.documents.length === 0) return null;
+			// Use the $id of the last document as the cursor.
+      const lastId = lastPage?.documents[lastPage?.documents?.length - 1].$id;
+      return lastId
+    }
+  })
+};
+
+export const useGetUserById = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
+    queryFn: () => getUserById(userId),
+    enabled: !!userId,
+  });
+};
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    //@ts-expect-error Type issue
+    mutationFn: (user: IUpdateUser) => updateUser(user),
+    onSuccess: (data: {
+      name: string,
+      bio: string,
+      imageUrl: string,
+      $id: string 
+}) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USER_BY_ID, data?.$id],
+      });
+    },
+  });
+};
