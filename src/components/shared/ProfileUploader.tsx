@@ -1,7 +1,7 @@
-import { useCallback, useState } from "react";
-import { FileWithPath, useDropzone } from "react-dropzone";
+import { useCallback, useState } from 'react';
+import { FileWithPath, useDropzone } from 'react-dropzone';
 
-import { convertFileToUrl } from "@/lib/utils";
+import { convertFileToUrl } from '@/lib/utils';
 
 type ProfileUploaderProps = {
   fieldChange: (files: File[]) => void;
@@ -18,13 +18,13 @@ const ProfileUploader = ({ fieldChange, mediaUrl }: ProfileUploaderProps) => {
       fieldChange(acceptedFiles);
       setFileUrl(convertFileToUrl(acceptedFiles[0]));
     },
-    [file]
+    [file],
   );
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: {
-      "image/*": [".png", ".jpeg", ".jpg"],
+      'image/*': ['.png', '.jpeg', '.jpg'],
     },
   });
 
@@ -34,7 +34,7 @@ const ProfileUploader = ({ fieldChange, mediaUrl }: ProfileUploaderProps) => {
 
       <div className="cursor-pointer flex-center gap-4">
         <img
-          src={fileUrl || "/assets/icons/profile-placeholder.svg"}
+          src={fileUrl || '/assets/icons/profile-placeholder.svg'}
           alt="image"
           className="h-24 w-24 rounded-full object-cover object-top"
         />

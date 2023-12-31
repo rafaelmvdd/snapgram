@@ -8,8 +8,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <QueryProvider>
       <AuthProvider>
-        <App /> 
+        <App />
       </AuthProvider>
     </QueryProvider>
-  </BrowserRouter>
-)
+  </BrowserRouter>,
+);

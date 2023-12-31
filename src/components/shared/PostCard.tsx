@@ -1,25 +1,28 @@
-import { useUserContext } from "@/context/AuthContext";
-import { multiFormatDateString } from "@/lib/utils";
-import { Models } from "appwrite";
-import { Link } from "react-router-dom";
-import PostStats from "./PostStats";
+import { useUserContext } from '@/context/AuthContext';
+import { multiFormatDateString } from '@/lib/utils';
+import { Models } from 'appwrite';
+import { Link } from 'react-router-dom';
+import PostStats from './PostStats';
 
 type PostCardProps = {
   post: Models.Document;
-}
+};
 
 const PostCard = ({ post }: PostCardProps) => {
   const { user } = useUserContext();
 
-  if(!post.creator) return;
+  if (!post.creator) return;
 
   return (
     <div className="post-card">
       <div className="flex-between">
         <div className="flex items-center gap-3">
           <Link to={`/profile/${post.creator.$id}`}>
-            <img 
-              src={post?.creator?.imageUrl || '/assets/icons/profile-placeholder.svg'}
+            <img
+              src={
+                post?.creator?.imageUrl ||
+                '/assets/icons/profile-placeholder.svg'
+              }
               alt="creator"
               className="rounded-full w-12 lg:h-12"
             />
@@ -33,17 +36,16 @@ const PostCard = ({ post }: PostCardProps) => {
               <p className="suble-semibold lg:small-regular">
                 {multiFormatDateString(post.$createdAt)}
               </p>
-              - 
-              <p className="suble-semibold lg:small-regular">
-                {post.location}
-              </p>
+              -
+              <p className="suble-semibold lg:small-regular">{post.location}</p>
             </div>
           </div>
         </div>
-        <Link to={`/update-post/${post.$id}`} className={`${user.id !== post.creator.$id && "hidden"}`}>
-          <img 
-            src="/assets/icons/edit.svg" alt="edit" width={20}
-          />
+        <Link
+          to={`/update-post/${post.$id}`}
+          className={`${user.id !== post.creator.$id && 'hidden'}`}
+        >
+          <img src="/assets/icons/edit.svg" alt="edit" width={20} />
         </Link>
       </div>
 
@@ -59,15 +61,15 @@ const PostCard = ({ post }: PostCardProps) => {
           </ul>
         </div>
 
-        <img 
+        <img
           src={post.imageUrl || '/assets/icons/profile-placeholder.svg'}
           className="post-card_img"
           alt="post image"
         />
       </Link>
-      <PostStats post={post} userId={user.id}/>
+      <PostStats post={post} userId={user.id} />
     </div>
-  )
-}
+  );
+};
 
-export default PostCard
+export default PostCard;
