@@ -1,8 +1,8 @@
-import { useUserContext } from '@/context/AuthContext';
-import { multiFormatDateString } from '@/lib/utils';
-import { Models } from 'appwrite';
-import { Link } from 'react-router-dom';
-import PostStats from './PostStats';
+import { useUserContext } from "@/context/AuthContext";
+import { multiFormatDateString } from "@/lib/utils";
+import { Models } from "appwrite";
+import { Link } from "react-router-dom";
+import PostStats from "./PostStats";
 
 type PostCardProps = {
   post: Models.Document;
@@ -21,10 +21,10 @@ const PostCard = ({ post }: PostCardProps) => {
             <img
               src={
                 post?.creator?.imageUrl ||
-                '/assets/icons/profile-placeholder.svg'
+                "/assets/icons/profile-placeholder.svg"
               }
               alt="creator"
-              className="rounded-full w-12 lg:h-12"
+              className="rounded-full w-12 h-12 max-w-none"
             />
           </Link>
 
@@ -43,7 +43,7 @@ const PostCard = ({ post }: PostCardProps) => {
         </div>
         <Link
           to={`/update-post/${post.$id}`}
-          className={`${user.id !== post.creator.$id && 'hidden'}`}
+          className={`${user.id !== post.creator.$id && "hidden"}`}
         >
           <img src="/assets/icons/edit.svg" alt="edit" width={20} />
         </Link>
@@ -62,7 +62,7 @@ const PostCard = ({ post }: PostCardProps) => {
         </div>
 
         <img
-          src={post.imageUrl || '/assets/icons/profile-placeholder.svg'}
+          src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
           className="post-card_img"
           alt="post image"
         />
